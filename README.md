@@ -25,6 +25,17 @@ The repository is organized as follows:
 | I2C (SDA/SCL) | GPIO 21 / 22 | OLED Communication |
 | Buttons | 32, 33, 25, 26 | Menu / Plus / Minus / Select |
 
+## ⚙️ Getting Started
+To run the Python interface on your computer, execute the following commands in your terminal:
+
+```bash
+# Install dependencies
+pip install -r requirements.txt
+
+# Run the interface
+python Python_Interface/miniprojet.py
+```
+
 ## ⚙️ Software & Dependencies
 ### Firmware (Arduino IDE)
 - `Adafruit_SSD1306` & `Adafruit_GFX`

@@ -29,7 +29,7 @@ The repository is organized as follows:
 | Buttons | 32, 33, 25, 26 | Menu / Plus / Minus / Select |
 
 <p align="center">
-  <img src="Assets/circuit.png" alt="Circuit Diagram" width="700"/>
+  <img src="Assets/circuit_diagram.png" alt="Circuit Diagram" width="700"/>
 </p>
 ## ⚙️ Getting Started
 To run the Python interface on your computer, execute the following commands in your terminal:

@@ -33,7 +33,7 @@ To run the Python interface on your computer, execute the following commands in 
 pip install -r requirements.txt
 
 # Run the interface
-python Python_Interface/miniprojet.py
+python "Esp32 Python Interface/miniprojet.py"
 ```
 
 ## ⚙️ Software & Dependencies

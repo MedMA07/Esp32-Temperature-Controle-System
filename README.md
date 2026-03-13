@@ -2,7 +2,9 @@
 
 A modular temperature regulation system using an **ESP32**. It implements **Hysteresis Control** to maintain stable thermal conditions, featuring a triple-interface monitoring system (OLED, Web, and Python).
 
-
+<p align="center">
+  <img src="logo.png" alt="Project Logo" width="200"/>
+</p>
 
 ## 📁 Project Structure
 The repository is organized as follows:
@@ -24,6 +26,10 @@ The repository is organized as follows:
 | Heater Control | GPIO 15 | ON/OFF Output |
 | I2C (SDA/SCL) | GPIO 21 / 22 | OLED Communication |
 | Buttons | 32, 33, 25, 26 | Menu / Plus / Minus / Select |
+
+<p align="center">
+  <img src="Proteus_Schematics/circuit_diagram.png" alt="Circuit Diagram" width="600"/>
+</p>
 
 ## ⚙️ Getting Started
 To run the Python interface on your computer, execute the following commands in your terminal:

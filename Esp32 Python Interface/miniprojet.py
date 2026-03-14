@@ -1,111 +1,133 @@
 import serial
 import tkinter as tk
+from tkinter import ttk
 from collections import deque
 import matplotlib
 matplotlib.use("TkAgg")
 
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
-import matplotlib.ticker as ticker
 
-# ===== SERIAL =====
-ser = serial.Serial('COM4', 115200, timeout=1)
+# ===== الإعدادات الأساسية =====
+try:
+    ser = serial.Serial('COM4', 115200, timeout=1)
+except:
+    ser = None
+    print("Error: ESP32 not found.")
 
-# ===== DATA =====
 data = deque(maxlen=100)
 
-# ===== WINDOW =====
 root = tk.Tk()
-root.title("Smart Dashboard")
-root.geometry("900x650")
+root.title("Thermal Control Dashboard")
+root.geometry("1100x800")
+root.configure(bg="#1a1a2e")
 
-# ===== TOP =====
-top = tk.Frame(root)
-top.pack(side=tk.TOP, fill=tk.X, pady=8)
+# ===== HEADER (العنوان العلوي) =====
+header = tk.Frame(root, bg="#16213e", height=50)
+header.pack(side=tk.TOP, fill=tk.X)
 
-title = tk.Label(top, text="Temperature Control", font=("Arial", 16, "bold"))
-title.pack()
+# اللوجو
+try:
+    img = tk.PhotoImage(file="logo.png").subsample(3,3)
+    lbl_img = tk.Label(header, image=img, bg="#16213e")
+    lbl_img.pack(side=tk.LEFT, padx=10)
+except:
+    pass
 
-state_var = tk.StringVar(value="SYSTEM: ---")
-state_lbl = tk.Label(top, textvariable=state_var, font=("Arial", 12))
-state_lbl.pack()
+# عنوان المشروع
+tk.Label(header, text="SYSTEM MONITORING Temp esp32 v1.0", fg="#e94560", 
+         bg="#16213e", font=("Arial", 10, "bold")).pack(side=tk.LEFT, padx=10)
 
-# ===== PARAMETERS FRAME =====
-frame = tk.LabelFrame(root, text="Parameters", padx=10, pady=10)
-frame.pack(side=tk.TOP, fill=tk.X, padx=10, pady=5)
+# حالة النظام (بشكل بارز)
+state_var = tk.StringVar(value="WAITING...")
+state_lbl = tk.Label(header, textvariable=state_var, font=("Consolas", 16, "bold"), 
+                     bg="#16213e", fg="#ffffff", padx=20)
+state_lbl.pack(side=tk.RIGHT, padx=20)
 
-T_HIGH = tk.DoubleVar(value=27)
-T_LOW  = tk.DoubleVar(value=24)
-HYST   = tk.DoubleVar(value=2)
+# ===== MAIN CONTENT =====
+main_container = tk.Frame(root, bg="#1a1a2e")
+main_container.pack(fill=tk.BOTH, expand=True)
 
-def send_value(name, var):
-    ser.write(f"{name}:{var.get()}\n".encode())
+# 1. Left Panel (Control - 25%)
+control_panel = tk.Frame(main_container, bg="#16213e", width=250, padx=15, pady=20)
+control_panel.pack(side=tk.LEFT, fill=tk.Y, padx=5, pady=5)
 
-tk.Label(frame, text="T_HIGH").grid(row=0, column=0)
-tk.Entry(frame, textvariable=T_HIGH, width=6).grid(row=0, column=1)
-tk.Button(frame, text="Set", command=lambda: send_value("T_HIGH", T_HIGH)).grid(row=0, column=2)
+T_HIGH = tk.DoubleVar(value=27.0)
+T_LOW  = tk.DoubleVar(value=24.0)
+HYST   = tk.DoubleVar(value=2.0)
 
-tk.Label(frame, text="T_LOW").grid(row=1, column=0)
-tk.Entry(frame, textvariable=T_LOW, width=6).grid(row=1, column=1)
-tk.Button(frame, text="Set", command=lambda: send_value("T_LOW", T_LOW)).grid(row=1, column=2)
+def send_v(n, v):
+    if ser: ser.write(f"{n}:{v.get()}\n".encode()); update_limit_lines()
 
-tk.Label(frame, text="HYST").grid(row=2, column=0)
-tk.Entry(frame, textvariable=HYST, width=6).grid(row=2, column=1)
-tk.Button(frame, text="Set", command=lambda: send_value("HYST", HYST)).grid(row=2, column=2)
+def add_ui(label, var, name, color):
+    tk.Label(control_panel, text=label, fg="#95a5a6", bg="#16213e", font=("Arial", 8)).pack(anchor="w", pady=(10,0))
+    ent = tk.Entry(control_panel, textvariable=var, font=("Consolas", 14), bg="#0f3460", fg="white", borderwidth=0)
+    ent.pack(fill=tk.X, pady=5)
+    btn = tk.Button(control_panel, text=f"SET {name}", bg=color, fg="white", font=("Arial", 9, "bold"), 
+                    relief=tk.FLAT, cursor="hand2", command=lambda: send_v(name, var))
+    btn.pack(fill=tk.X, pady=(0,10))
 
-# ===== GRAPH (Y de 0 à 32°C) =====
-graph_frame = tk.Frame(root)
-graph_frame.pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True, padx=5, pady=5)
+add_ui("UPPER LIMIT", T_HIGH, "T_HIGH", "#e94560")
+add_ui("LOWER LIMIT", T_LOW, "T_LOW", "#4ecc71")
+add_ui("HYSTERESIS", HYST, "HYST", "#533483")
 
-fig = Figure(figsize=(7,4), dpi=120)
+# 2. Right Panel (Graph - 75%)
+graph_panel = tk.Frame(main_container, bg="#1a1a2e")
+graph_panel.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True, padx=5, pady=5)
+
+fig = Figure(figsize=(10, 8), facecolor='#1a1a2e')
 ax = fig.add_subplot(111)
+ax.set_facecolor('#1a1a2e')
 
-ax.set_ylim(0, 32)  # <-- ici axe Y limité à 0-32
-ax.set_ylabel("Temperature (°C)")
-ax.set_title("Temperature (real time)", fontsize=14, fontweight="bold")
+ax.tick_params(colors='white', labelsize=9)
+ax.set_ylim(15, 45)
+ax.set_yticks(range(15, 46, 2))
+ax.grid(True, color='#16213e', linestyle='--', linewidth=0.5)
 
-# grid principal
-ax.grid(True, which='both', linestyle='--', linewidth=0.5, alpha=0.7)
+line, = ax.plot([], [], color="#00d4ff", linewidth=3, label="Temperature")
+hline_h = ax.axhline(T_HIGH.get(), color='#e94560', linestyle='--', linewidth=1.5, label="High Limit")
+hline_l = ax.axhline(T_LOW.get(), color='#4ecc71', linestyle='--', linewidth=1.5, label="Low Limit")
 
-# graduation axe Y précise
-ax.yaxis.set_major_locator(ticker.MultipleLocator(1))   # chaque 1°C
-ax.yaxis.set_minor_locator(ticker.MultipleLocator(0.5))  # mini grid
-ax.grid(True, which='minor', linestyle=':', linewidth=0.4, alpha=0.5)
+ax.legend(facecolor='#16213e', labelcolor='white', loc='upper right', fontsize='small')
 
-# ligne
-line, = ax.plot([], [], color="red", linewidth=2, marker='o', markersize=4)
-
-canvas = FigureCanvasTkAgg(fig, master=graph_frame)
+canvas = FigureCanvasTkAgg(fig, master=graph_panel)
 canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
 
-# ===== UPDATE LOOP =====
+def update_limit_lines():
+    hline_h.set_ydata([T_HIGH.get(), T_HIGH.get()])
+    hline_l.set_ydata([T_LOW.get(), T_LOW.get()])
+    canvas.draw()
+
+# ===== دالة التحديث ومطابقة حالة النظام =====
 def update():
     try:
-        line_serial = ser.readline().decode().strip()
-    except:
-        line_serial = ""
+        if ser and ser.in_waiting > 0:
+            line_s = ser.readline().decode().strip()
+            if "Temp:" in line_s:
+                # استخراج درجة الحرارة
+                val = float(line_s.split("|")[0].split(":")[1].strip())
+                data.append(val)
+                line.set_data(range(len(data)), list(data))
+                
+                # --- منطق حالة النظام (State Logic) ---
+                # نطبق نفس شروط الـ ESP32 لضمان التطابق
+                high_threshold = T_HIGH.get() + HYST.get()
+                low_threshold = T_LOW.get() - HYST.get()
 
-    if line_serial:
-        try:
-            temp = float(line_serial.split("|")[0].split(":")[1])
-            data.append(temp)
-
-            line.set_xdata(range(len(data)))
-            line.set_ydata(list(data))
-
-            ax.relim()
-            ax.autoscale_view()
-            canvas.draw()
-
-            if "ON" in line_serial:
-                state_var.set("SYSTEM: ON")
-            else:
-                state_var.set("SYSTEM: OFF")
-
-        except:
-            pass
-
-    root.after(200, update)
+                if val >= high_threshold:
+                    state_var.set("HEATER: OFF")
+                    state_lbl.config(fg="#e94560") # أحمر عند الوصول للحد الأقصى
+                elif val <= low_threshold:
+                    state_var.set("HEATER: ON")
+                    state_lbl.config(fg="#4ecc71") # أخضر عند الحاجة للتسخين
+                
+                ax.relim()
+                ax.autoscale_view(scalex=True, scaley=False)
+                canvas.draw()
+    except Exception as e:
+        print(f"Error: {e}")
+        
+    root.after(100, update)
 
 update()
 root.mainloop()

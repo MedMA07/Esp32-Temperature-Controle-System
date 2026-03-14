@@ -63,7 +63,7 @@ Follow these steps to run the PC monitoring interface:
 1. **Hardware Setup:** Connect your ESP32 via USB and check your Serial Port (e.g., `COM3` or `/dev/ttyUSB0`).
 2. **Configure:** Update the `SERIAL_PORT` variable in `miniprojet.py` if necessary.
 3. **Run:**
-   ```bash
+ ```bash
    pip install -r requirements.txt
    python "Esp32 Python Interface/miniprojet.py"
 
@@ -86,10 +86,13 @@ Follow these steps to run the PC monitoring interface:
 
 ---
 
----
 ## 📬 Connect with me
-
-
+```markdown
+## 🔮 Future Improvements
+- **Data Logging:** Store temperature history on an SD Card or Firebase/Cloud for long-term analytics.
+- **PID Control:** Implement a PID algorithm instead of simple Hysteresis for more precise temperature regulation.
+- **Mobile App:** Develop a dedicated Flutter/React Native app for a better mobile experience.
+```
 <p align="left">
   <a href="https://github.com/MedMA07" target="_blank">
     <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" />

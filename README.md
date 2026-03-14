@@ -34,12 +34,37 @@ The repository is organized as follows:
 ## ⚙️ Getting Started
 To run the Python interface on your computer, execute the following commands in your terminal:
 
+## 🖥️ OLED Menu System
+The system features an interactive menu on the OLED display, controlled via physical pushbuttons.
+
+* **Menu 1 (Dashboard):** Displays the system logo and welcome screen.
+    ![Menu 1](Assets/menu1.png)
+* **Menu 2 (Live Monitor):** Shows the current temperature ($°C$) and the system's operational status (ON/OFF).
+    ![Menu 2](Assets/menu2.png)
+* **Menu 3 (Parameter Tuning):** Allows manual adjustment of $T_{high}$, $T_{low}$, and Hysteresis values using onboard buttons.
+    ![Menu 3](Assets/menu3.png)
+* **Menu 4 (Visualization):** Provides a real-time graph of temperature trends over time.
+    ![Menu 4](Assets/menu4.png)
+
+## 🌐 Web Interface
+The built-in Web Server allows remote monitoring and control. You can view the real-time temperature, system status, and update thermal thresholds directly from your browser.
+![Web Interface](Assets/webinterface.png)
+
+## 💻 Python Dashboard
+The Python interface provides an advanced visualization experience on your PC, utilizing `Matplotlib` for graphing and `Tkinter` for the control dashboard. It communicates via Serial to ensure low-latency data updates.
+![Python Interface](Assets/pythoninterface.png)
+
+## 🚀 Getting Started
+To run the Python interface on your computer, execute the following commands in your terminal:
+
 ```bash
 # Install dependencies
 pip install -r requirements.txt
 
 # Run the interface
 python "Esp32 Python Interface/miniprojet.py"
+
+
 ```
 
 ## ⚙️ Software & Dependencies

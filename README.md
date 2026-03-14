@@ -19,6 +19,10 @@ The repository is organized as follows:
   - **Local:** SSD1306 OLED display with menu navigation.
   - **Web:** Embedded Web Server (WiFi) for remote parameter tuning.
   - **PC:** Real-time Python GUI (Tkinter & Matplotlib).
+## ⚙️ Control Logic
+The system utilizes a **Hysteresis Control Loop** to maintain thermal stability:
+- **Hysteresis Deadband:** Acts as a buffer to prevent rapid relay switching (chattering) when the temperature hovers around the setpoints.
+- **Filtering:** Uses a moving average algorithm on the NTC sensor readings to eliminate noise and ensure a stable control signal.
 
 ## 📋 Pinout Configuration
 | Component | ESP32 GPIO | Function |
@@ -31,8 +35,7 @@ The repository is organized as follows:
 <p align="center">
   <img src="Assets/circuit_diagram.png" alt="Circuit Diagram" width="700"/>
 </p>
-## ⚙️ Getting Started
-To run the Python interface on your computer, execute the following commands in your terminal:
+
 
 ## 🖥️ OLED Menu System
 The system features an interactive menu on the OLED display, controlled via physical pushbuttons.
@@ -55,15 +58,14 @@ The Python interface provides an advanced visualization experience on your PC, u
 ![Python Interface](Assets/pythoninterface.png)
 
 ## 🚀 Getting Started
-To run the Python interface on your computer, execute the following commands in your terminal:
+Follow these steps to run the PC monitoring interface:
 
-```bash
-# Install dependencies
-pip install -r requirements.txt
-
-# Run the interface
-python "Esp32 Python Interface/miniprojet.py"
-
+1. **Hardware Setup:** Connect your ESP32 via USB and check your Serial Port (e.g., `COM3` or `/dev/ttyUSB0`).
+2. **Configure:** Update the `SERIAL_PORT` variable in `miniprojet.py` if necessary.
+3. **Run:**
+   ```bash
+   pip install -r requirements.txt
+   python "Esp32 Python Interface/miniprojet.py"
 
 ```
 
@@ -86,6 +88,11 @@ python "Esp32 Python Interface/miniprojet.py"
 
 ---
 ## 📬 Connect with me
+```markdown
+## 🔮 Future Improvements
+- **Data Logging:** Store temperature history on an SD Card or Firebase/Cloud for long-term analytics.
+- **PID Control:** Implement a PID algorithm instead of simple Hysteresis for more precise temperature regulation.
+- **Mobile App:** Develop a dedicated Flutter/React Native app for a better mobile experience.
 
 <p align="left">
   <a href="https://github.com/MedMA07" target="_blank">

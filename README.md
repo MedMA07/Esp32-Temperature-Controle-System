@@ -88,11 +88,7 @@ Follow these steps to run the PC monitoring interface:
 
 ---
 ## 📬 Connect with me
-```markdown
-## 🔮 Future Improvements
-- **Data Logging:** Store temperature history on an SD Card or Firebase/Cloud for long-term analytics.
-- **PID Control:** Implement a PID algorithm instead of simple Hysteresis for more precise temperature regulation.
-- **Mobile App:** Develop a dedicated Flutter/React Native app for a better mobile experience.
+
 
 <p align="left">
   <a href="https://github.com/MedMA07" target="_blank">

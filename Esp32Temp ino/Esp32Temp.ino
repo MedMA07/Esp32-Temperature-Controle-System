@@ -90,26 +90,91 @@ float To = 298.15;
 float tempValues[MAX_VALUES] = {0};
 int valueIndex = 0;
 
+
+const int numSamples = 10; // عدد العينات للحصول على قراءة مستقرة
 //================ VARIABLES =============
 float T_HIGH = 27.0;
 float T_LOW  = 24.0;
 float HYST   = 2.0;
+float tempC = 0.0; 
 
 int menuState = 1;
 int selected  = 1;
 
 //================ WEB SIMPLE =============
-void handleRoot() {
-  String html = "<html><head><meta name='viewport' content='width=device-width, initial-scale=1'>";
-  html += "<script>function s(n,v){fetch('/set?var='+n+'&val='+v);} </script>";
-  html += "</head><body>";
-  html += "<h2>ESP32 Temp Control</h2>";
-  html += "T_High:<input type='number' value='"+String(T_HIGH)+"' onchange='s(\"T_HIGH\",this.value)'><br>";
-  html += "T_Low:<input type='number' value='"+String(T_LOW)+"' onchange='s(\"T_LOW\",this.value)'><br>";
-  html += "Hyst:<input type='number' value='"+String(HYST)+"' onchange='s(\"HYST\",this.value)'><br>";
-  html += "</body></html>";
-  server.send(200,"text/html",html);
+// --- دالة إرسال البيانات (JSON) لطلب الـ AJAX ---
+void handleStatus() {
+  String json = "{";
+  json += "\"temp\":" + String(tempC, 1) + ","; // إرسال الحرارة بفاصلة واحدة
+  json += "\"state\":\"" + String(LEDstate ? "ON" : "OFF") + "\"";
+  json += "}";
+  server.send(200, "application/json", json);
 }
+
+// --- واجهة المستخدم الاحترافية ---
+void handleRoot() {
+  String html = "<!DOCTYPE html><html><head>";
+  html += "<meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'>";
+  html += "<title>USTO-MB Thermal Control</title>";
+  
+  html += "<style>";
+  html += "body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; display: flex; justify-content: center; padding: 20px; }";
+  html += ".card { background: white; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 400px; padding: 20px; }";
+  html += ".header { text-align: center; color: #2c3e50; border-bottom: 2px solid #e94560; margin-bottom: 20px; }";
+  html += ".monitor { background: #1e1e2f; color: #00f2c3; border-radius: 10px; padding: 20px; text-align: center; margin-bottom: 20px; }";
+  html += ".temp-val { font-size: 50px; font-weight: bold; }";
+  html += ".status-box { margin-top: 10px; font-size: 18px; font-weight: bold; }";
+  html += ".btn { width: 100%; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; margin-top: 5px; background: #e94560; color: white; }";
+  html += ".btn:hover { background: #d8344d; }";
+  html += "input { width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }";
+  html += "label { font-size: 12px; color: #7f8c8d; font-weight: bold; }";
+  html += "</style>";
+
+  html += "<script>";
+  // كود التحديث التلقائي
+  html += "setInterval(function() {";
+  html += "  fetch('/status').then(r => r.json()).then(data => {";
+  html += "    document.getElementById('t').innerText = data.temp;";
+  html += "    var s = document.getElementById('s');";
+  html += "    s.innerText = data.state;";
+  html += "    s.style.color = (data.state == 'ON' ? '#00f2c3' : '#e94560');";
+  html += "  });";
+  html += "}, 1000);";
+
+  // دالة إرسال القيم
+  html += "function setVal(p) {";
+  html += "  var v = document.getElementById(p).value;";
+  html += "  fetch('/set?var=' + p + '&val=' + v).then(() => alert('OK! ' + p + ' updated'));";
+  html += "}";
+  html += "</script>";
+
+  html += "</head><body>";
+  html += "<div class='card'>";
+  html += "<div class='header'><h2>Control Station</h2></div>";
+  
+  // شاشة المراقبة
+  html += "<div class='monitor'>";
+  html += "  <div class='temp-val'><span id='t'>--</span>°C</div>";
+  html += "  <div class='status-box'>HEATER: <span id='s'>--</span></div>";
+  html += "</div>";
+
+  // مدخلات التعديل
+  auto addInput = [&](String id, String label, float val) {
+    html += "<label>" + label + "</label>";
+    html += "<input type='number' id='" + id + "' value='" + String(val) + "' step='0.5'>";
+    html += "<button class='btn' onclick=\"setVal('" + id + "')\">UPDATE " + id + "</button><br><br>";
+  };
+
+  addInput("T_HIGH", "HIGH THRESHOLD", T_HIGH);
+  addInput("T_LOW", "LOW THRESHOLD", T_LOW);
+  addInput("HYST", "HYSTERESIS MARGIN", HYST);
+
+  html += "</div></body></html>";
+  server.send(200, "text/html", html);
+}
+
+
+
 
 //================ GRAPH =================
 void drawGraph(float temp){
@@ -207,13 +272,15 @@ void setup() {
 
   WiFi.softAP(ssid, password);
 
+WiFi.softAP(ssid, password);
   server.on("/", handleRoot);
+  server.on("/status", handleStatus);
   server.on("/set", [](){
     String var = server.arg("var");
-    String val = server.arg("val");
-    if(var == "T_HIGH") T_HIGH = val.toFloat();
-    if(var == "T_LOW")  T_LOW = val.toFloat();
-    if(var == "HYST")   HYST = val.toFloat();
+    float val = server.arg("val").toFloat();
+    if(var == "T_HIGH") T_HIGH = val;
+    else if(var == "T_LOW") T_LOW = val;
+    else if(var == "HYST") HYST = val;
     server.send(200, "text/plain", "OK");
   });
   server.begin();
@@ -239,12 +306,26 @@ if (Serial.available()) {
   server.handleClient();
 
   //---- Temperature ----
-  int val = analogRead(NTCpin);
+// --- التعديل يبدأ هنا ---
+  
+  float sumVal = 0;
+  int samples = 20; // نأخذ 20 قراءة باش القراءة تولي ثابتة بزاف
+  
+  for (int i = 0; i < samples; i++) {
+    sumVal += analogRead(NTCpin);
+    delay(2); // تأخير صغير جداً بين القراءات
+  }
+  
+  float val = sumVal / samples; // القراءة المتوسطة (Stable ADC)
+
+  // الحسابات الباقية تبقى كما هي لكنها ستكون أدق الآن
   float Vout = val * 3.3 / 4095.0;
   if(Vout == 0) Vout = 0.001;
   float Rntc = R1 * (3.3 / Vout - 1.0);
   float tempK = 1 / ((log(Rntc / 10000.0) / B) + (1 / To));
   float tempC = tempK - 273.15;
+
+
   
   //---- LED Control ----
   if(tempC >= T_HIGH+HYST){ digitalWrite(LEDpin,LOW); LEDstate = false; }

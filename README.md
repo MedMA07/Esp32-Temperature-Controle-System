@@ -86,16 +86,19 @@ Follow these steps to run the PC monitoring interface:
 
 ---
 
-## 📬 Connect with me
-```markdown
 ## 🔮 Future Improvements
 - **Data Logging:** Store temperature history on an SD Card or Firebase/Cloud for long-term analytics.
 - **PID Control:** Implement a PID algorithm instead of simple Hysteresis for more precise temperature regulation.
 - **Mobile App:** Develop a dedicated Flutter/React Native app for a better mobile experience.
-```
+
+---
+
 <p align="left">
   <a href="https://github.com/MedMA07" target="_blank">
     <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" />
+  </a>
+  <a href="https://www.linkedin.com/in/medma7/" target="_blank">
+    <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" />
   </a>
   <a href="https://linktr.ee/el.amine.m" target="_blank">
     <img src="https://img.shields.io/badge/Linktree-39E09B?style=for-the-badge&logo=linktree&logoColor=white" alt="Linktree" />
@@ -110,4 +113,5 @@ Follow these steps to run the PC monitoring interface:
     <img src="https://img.shields.io/badge/Snapchat-FFFC00?style=for-the-badge&logo=snapchat&logoColor=black" alt="Snapchat" />
   </a>
 </p>
+
 *Developed as a comprehensive project for Embedded Systems & IoT monitoring.*

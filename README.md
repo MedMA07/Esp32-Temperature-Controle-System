@@ -92,33 +92,34 @@ Follow these steps to run the PC monitoring interface:
 
 ---
 
-## 📬 Connect with me
+---
 
-<p align="left">
-  <a href="https://github.com/MedMA07" target="_blank">
-    <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" />
-  </a>
-  <a href="https://www.linkedin.com/in/medma7/" target="_blank">
-    <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" />
-  </a>
-  <a href="mailto:elaminemed.ad@gmail.com">
-    <img src="https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white" alt="Gmail" />
-  </a>
-  <a href="https://wa.me/213668598710" target="_blank">
-    <img src="https://img.shields.io/badge/WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" alt="WhatsApp" />
-  </a>
-  <a href="https://linktr.ee/el.amine.m" target="_blank">
-    <img src="https://img.shields.io/badge/Linktree-39E09B?style=for-the-badge&logo=linktree&logoColor=white" alt="Linktree" />
-  </a>
-  <a href="https://www.facebook.com/el.aminem07/" target="_blank">
-    <img src="https://img.shields.io/badge/Facebook-1877F2?style=for-the-badge&logo=facebook&logoColor=white" alt="Facebook" />
-  </a>
-  <a href="https://www.instagram.com/el.amine.m/" target="_blank">
-    <img src="https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white" alt="Instagram" />
-  </a>
-  <a href="https://www.snapchat.com/@med_ma7" target="_blank">
-    <img src="https://img.shields.io/badge/Snapchat-FFFC00?style=for-the-badge&logo=snapchat&logoColor=black" alt="Snapchat" />
-  </a>
+## ☕ Support My Work
+
+---
+
+### 🌐 Connect with Me (El-Amine):
+
+<p>
+<a href="https://www.linkedin.com/in/medma7/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"/></a>
+<a href="https://github.com/MedMA07"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white"/></a>
+<a href="https://linktr.ee/el.amine.m"><img src="https://img.shields.io/badge/Linktree-39E09B?style=for-the-badge&logo=linktree&logoColor=white"/></a>
+<a href="https://www.instagram.com/medma_7/"><img src="https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white"/></a>
+<a href="https://t.me/med_ma7"><img src="https://img.shields.io/badge/Telegram-26A8E1?style=for-the-badge&logo=telegram&logoColor=white"/></a>
+<a href="https://api.whatsapp.com/send/?phone=213668598710"><img src="https://img.shields.io/badge/WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=white"/></a>
+<a href="https://www.facebook.com/medma07"><img src="https://img.shields.io/badge/Facebook-1877F2?style=for-the-badge&logo=facebook&logoColor=white"/></a>
+<a href="https://www.snapchat.com/add/med_ma7"><img src="https://img.shields.io/badge/Snapchat-FFFC00?style=for-the-badge&logo=snapchat&logoColor=black"/></a>
 </p>
 
-*Developed as a comprehensive project for Embedded Systems & IoT monitoring.*
+📧 **Email:** elaminemed.ad@gmail.com <br>
+📱 **Phone/WhatsApp:** +213 668 59 87 10 <br>
+📍 **Location:** Oran, Algeria
+
+
+<div align="center">
+
+*Always open to internships, technical collaborations, and new challenges!*
+
+**⭐ If this project helped you, don't forget to star the repository! ⭐**
+
+</div>
